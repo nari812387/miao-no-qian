@@ -1,117 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>喵の籤｜每日運勢卡</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>喵の籤</title>
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", "微軟正黑體", sans-serif;
+    }
+
     body {
-      background-color: #fff8f0;
-      font-family: "Helvetica", "Noto Sans TC", sans-serif;
+      background: #fffbe7;
       text-align: center;
-      padding: 2rem;
+      padding: 1rem;
+      margin: 0;
     }
+
     h1 {
-      font-size: 2.2rem;
-      color: #ff6699;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
+
     button {
-      padding: 10px 20px;
-      font-size: 1.1rem;
-      background-color: #ffccdd;
+      background-color: #ffb6c1;
       border: none;
       border-radius: 12px;
-      cursor: pointer;
-      margin: 1rem;
-    }
-    img {
-      margin-top: 1rem;
-      max-width: 300px;
-      border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    }
-    .title {
-      font-size: 1.3rem;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    .desc {
+      padding: 12px 20px;
       font-size: 1rem;
-      color: #666;
-      margin: 0.5rem 0 2rem;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #ffa4b8;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .draw-count {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (min-width: 600px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      button {
+        font-size: 1.2rem;
+        padding: 14px 24px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h1>🐾 喵の籤</h1>
-  <p>每天可以抽兩次貓貓運勢卡</p>
-
-  <button onclick="drawCard()">抽卡！</button>
-  <button onclick="resetDraws()">重置今天抽卡次數</button>
-
-  <div id="card-container" style="display: none;">
-    <img id="card-img" src="">
-    <div class="title" id="card-title"></div>
-    <div class="desc" id="card-desc"></div>
-  </div>
-
-  <!-- 背景音樂 -->
+  <h1>🐱 喵の籤 🐾</h1>
+  <button onclick="drawCard()">抽卡</button>
+  <button onclick="resetCount()">重置次數</button>
+  <button onclick="downloadImage()">下載圖片</button>
+  <div class="draw-count" id="count">今日已抽 0 / 2 次</div>
+  <img id="cardImage" src="" alt="抽到的卡牌會出現在這裡" />
   <audio id="bgm" src="bgm.mp3" autoplay loop></audio>
 
   <script>
-    // 背景音樂播放（避免瀏覽器阻擋）
-    document.addEventListener('click', function () {
-      const audio = document.getElementById("bgm");
-      if (audio.paused) {
-        audio.play().catch(() => {}); // 忽略錯誤
-      }
-    }, { once: true });
+    const images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg"];
+    let drawCount = parseInt(localStorage.getItem("drawCount") || "0");
+    let lastDate = localStorage.getItem("lastDrawDate");
+    const today = new Date().toLocaleDateString();
+    const cardImage = document.getElementById("cardImage");
+    const countText = document.getElementById("count");
 
-    const cards = [
-      { id: 1, title: "だる喵", desc: "今天沒幹勁也沒關係～慢慢來吧", img: "1.jpg" },
-      { id: 2, title: "元氣喵", desc: "活力滿滿的一天，要好好把握喔！", img: "2.jpg" },
-      { id: 3, title: "神秘喵", desc: "今天可能會遇到特別的人...", img: "3.jpg" },
-      { id: 4, title: "幸運喵", desc: "小確幸在等你發現～", img: "4.jpg" },
-      { id: 5, title: "懶懶喵", desc: "偶爾耍廢一下也沒關係。", img: "5.jpg" },
-      { id: 6, title: "發財喵", desc: "財運旺旺，記得多笑一點！", img: "6.jpg" },
-      { id: 7, title: "思考喵", desc: "今天適合好好規劃下一步", img: "7.jpg" }
-    ];
-
-    function getTodayKey() {
-      const today = new Date().toISOString().split("T")[0];
-      return `draws_${today}`;
+    if (lastDate !== today) {
+      drawCount = 0;
+      localStorage.setItem("lastDrawDate", today);
+      localStorage.setItem("drawCount", drawCount);
     }
+
+    updateCountText();
 
     function drawCard() {
-      const key = getTodayKey();
-      let draws = JSON.parse(localStorage.getItem(key)) || [];
-
-      if (draws.length >= 2) {
-        alert("今天已經抽過兩次囉！");
+      if (drawCount >= 2) {
+        alert("今天已經抽過兩次了喔！明天再來吧 🐾");
         return;
       }
-
-      let card;
-      do {
-        card = cards[Math.floor(Math.random() * cards.length)];
-      } while (draws.includes(card.id) && draws.length < cards.length);
-
-      draws.push(card.id);
-      localStorage.setItem(key, JSON.stringify(draws));
-
-      document.getElementById("card-img").src = card.img;
-      document.getElementById("card-title").textContent = card.title;
-      document.getElementById("card-desc").textContent = card.desc;
-      document.getElementById("card-container").style.display = "block";
+      const index = Math.floor(Math.random() * images.length);
+      cardImage.src = images[index];
+      drawCount++;
+      localStorage.setItem("drawCount", drawCount);
+      localStorage.setItem("lastDrawDate", today);
+      updateCountText();
     }
 
-    function resetDraws() {
-      const key = getTodayKey();
-      localStorage.removeItem(key);
-      alert("已重置今天的抽卡紀錄，你可以重新抽兩次囉！");
-      document.getElementById("card-container").style.display = "none";
+    function updateCountText() {
+      countText.textContent = `今日已抽 ${drawCount} / 2 次`;
+    }
+
+    function resetCount() {
+      drawCount = 0;
+      localStorage.setItem("drawCount", "0");
+      updateCountText();
+      alert("已重置今日抽卡次數！");
+    }
+
+    function downloadImage() {
+      if (!cardImage.src) {
+        alert("請先抽卡喔！");
+        return;
+      }
+      const link = document.createElement("a");
+      link.href = cardImage.src;
+      link.download = "喵の籤.jpg";
+      link.click();
     }
   </script>
-
 </body>
 </html>
