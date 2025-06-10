@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>喵の籤｜每日運勢卡</title>
+  <style>
+    body {
+      background-color: #fff8f0;
+      font-family: "Helvetica", "Noto Sans TC", sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+      color: #ff6699;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      background-color: #ffccdd;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 1rem;
+    }
+    img {
+      margin-top: 1rem;
+      max-width: 300px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+    .title {
+      font-size: 1.3rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .desc {
+      font-size: 1rem;
+      color: #666;
+      margin: 0.5rem 0 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🐾 喵の籤</h1>
+  <p>每天可以抽兩次貓貓運勢卡</p>
+
+  <button onclick="drawCard()">抽卡！</button>
+  <button onclick="resetDraws()">重置今天抽卡次數</button>
+
+  <div id="card-container" style="display: none;">
+    <img id="card-img" src="">
+    <div class="title" id="card-title"></div>
+    <div class="desc" id="card-desc"></div>
+  </div>
+
+  <!-- 背景音樂 -->
+  <audio id="bgm" src="bgm.mp3" autoplay loop></audio>
+
+  <script>
+    // 背景音樂播放（避免瀏覽器阻擋）
+    document.addEventListener('click', function () {
+      const audio = document.getElementById("bgm");
+      if (audio.paused) {
+        audio.play().catch(() => {}); // 忽略錯誤
+      }
+    }, { once: true });
+
+    const cards = [
+      { id: 1, title: "だる喵", desc: "今天沒幹勁也沒關係～慢慢來吧", img: "1.jpg" },
+      { id: 2, title: "元氣喵", desc: "活力滿滿的一天，要好好把握喔！", img: "2.jpg" },
+      { id: 3, title: "神秘喵", desc: "今天可能會遇到特別的人...", img: "3.jpg" },
+      { id: 4, title: "幸運喵", desc: "小確幸在等你發現～", img: "4.jpg" },
+      { id: 5, title: "懶懶喵", desc: "偶爾耍廢一下也沒關係。", img: "5.jpg" },
+      { id: 6, title: "發財喵", desc: "財運旺旺，記得多笑一點！", img: "6.jpg" },
+      { id: 7, title: "思考喵", desc: "今天適合好好規劃下一步", img: "7.jpg" }
+    ];
+
+    function getTodayKey() {
+      const today = new Date().toISOString().split("T")[0];
+      return `draws_${today}`;
+    }
+
+    function drawCard() {
+      const key = getTodayKey();
+      let draws = JSON.parse(localStorage.getItem(key)) || [];
+
+      if (draws.length >= 2) {
+        alert("今天已經抽過兩次囉！");
+        return;
+      }
+
+      let card;
+      do {
+        card = cards[Math.floor(Math.random() * cards.length)];
+      } while (draws.includes(card.id) && draws.length < cards.length);
+
+      draws.push(card.id);
+      localStorage.setItem(key, JSON.stringify(draws));
+
+      document.getElementById("card-img").src = card.img;
+      document.getElementById("card-title").textContent = card.title;
+      document.getElementById("card-desc").textContent = card.desc;
+      document.getElementById("card-container").style.display = "block";
+    }
+
+    function resetDraws() {
+      const key = getTodayKey();
+      localStorage.removeItem(key);
+      alert("已重置今天的抽卡紀錄，你可以重新抽兩次囉！");
+      document.getElementById("card-container").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
