@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html><html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,187 +9,240 @@
       margin: 0;
       font-family: "Arial Rounded MT Bold", "Hiragino Maru Gothic Pro", sans-serif;
       background-color: #FFF7E6;
+      overflow-x: hidden;
+      position: relative;
       text-align: center;
-      overflow: hidden;
-    }
+    }#intro {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: #FFF7E6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeOut 2.5s ease-out forwards;
+  animation-delay: 2.5s;
+}
 
-    #intro {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #FFF7E6;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      animation: fadeOut 2.5s ease-out forwards;
-      animation-delay: 2.5s;
-    }
+.intro-logo {
+  font-size: 3rem;
+  color: #FF9AA2;
+  animation: popIn 1.5s ease-out;
+}
 
-    .intro-logo {
-      font-size: 3rem;
-      color: #FF9AA2;
-      animation: popIn 1.5s ease-out;
-    }
+.intro-cat {
+  width: 120px;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-out 1.2s forwards;
+}
 
-    .intro-cat {
-      width: 120px;
-      margin-top: 20px;
-      opacity: 0;
-      animation: fadeIn 1.5s ease-out 1.2s forwards;
-    }
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
 
-    @keyframes popIn {
-      0% { transform: scale(0); opacity: 0; }
-      60% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); }
-    }
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
 
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
+.hidden { display: none; }
 
-    .hidden {
-      display: none;
-    }
+#app {
+  padding: 30px;
+  animation: fadeInMain 1s ease-in 3s forwards;
+  opacity: 0;
+}
 
-    #app {
-      padding: 30px;
-      animation: fadeInMain 1s ease-in 3s forwards;
-      opacity: 0;
-    }
+@keyframes fadeInMain {
+  to { opacity: 1; }
+}
 
-    @keyframes fadeInMain {
-      to { opacity: 1; }
-    }
+h2 {
+  font-size: 2rem;
+  color: #FF9AA2;
+  margin-bottom: 20px;
+}
 
-    h2 {
-      font-size: 2rem;
-      color: #FF9AA2;
-    }
+#card-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+}
 
-    #card-container {
-      margin: 20px auto;
-    }
+#cat-card {
+  width: 300px;
+  max-width: 90%;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: none;
+}
 
-    #cat-card {
-      width: 300px;
-      max-width: 90%;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
+#draw-button, #reset-button {
+  background-color: #FFD6D6;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  margin: 10px;
+  transition: transform 0.2s;
+}
 
-    #draw-button {
-      background-color: #FFD6D6;
-      color: #fff;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1.2rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
+#draw-button:hover, #reset-button:hover {
+  transform: scale(1.05);
+  background-color: #FFB7C5;
+}
 
-    #draw-button:hover {
-      transform: scale(1.05);
-      background-color: #FFB7C5;
-    }
+#card-info {
+  font-size: 1.1rem;
+  margin-top: 15px;
+  color: #555;
+}
 
-    #card-info {
-      font-size: 1.1rem;
-      margin-top: 15px;
-      color: #555;
-      white-space: pre-line;
-    }
+.emoji-container img {
+  width: 30px;
+  margin: 0 2px;
+  animation: sparkle 1.2s infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('3.png') no-repeat center/contain;
+  animation: floatStar 3s linear infinite;
+}
+
+@keyframes floatStar {
+  0% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+}
+
   </style>
 </head>
 <body>
-  <!-- Intro Animation Screen -->
+  <div class="stars" id="star-container"></div>
   <div id="intro">
     <h1 class="intro-logo">喵の籤</h1>
-    <img src="cat-logo.jpg" alt="喵咪圖示" class="intro-cat" />
-  </div>
-
-  <!-- Main App -->
-  <main id="app" class="hidden">
-    <h2>今天的喵籤是...</h2>
+    <img src="cat-logo.jpg" alt="喵喵logo" class="intro-cat" />
+  </div>  <main id="app" class="hidden">
+    <h2>今日の喵籤は...</h2>
     <div id="card-container">
-      <img id="cat-card" src="" alt="貓貓卡牌" />
+      <img id="cat-card" src="" alt="喵喵卡片" />
     </div>
     <button id="draw-button">抽籤喵！</button>
+    <button id="reset-button">重置</button>
     <p id="card-info"></p>
-  </main>
-
-  <!-- 音樂播放器 -->
-  <audio id="bgm" src="bgm.mp3" loop></audio>
+  </main><audio id="bgm" src="bgm.mp3"></audio>
 
   <script>
     const app = document.getElementById('app');
     const intro = document.getElementById('intro');
     const drawBtn = document.getElementById('draw-button');
+    const resetBtn = document.getElementById('reset-button');
     const catCard = document.getElementById('cat-card');
     const cardInfo = document.getElementById('card-info');
     const bgm = document.getElementById('bgm');
+    const starContainer = document.getElementById('star-container');
 
     const cards = [
-      {
-        src: "1.jpg",
-        info: "喵吉祥物 🌸 你是今天的閃亮之星！\n情緒值：🩷🩷🩷🩷🩷"
-      },
-      {
-        src: "2.jpg",
-        info: "びび喵 😳 今天有點敏感～放輕鬆就好喔！\n情緒值：🩷🩷🤍🤍🤍"
-      },
-      {
-        src: "3.jpg",
-        info: "冒險喵 🚀 新挑戰降臨囉～勇敢一點！\n情緒值：🩷🩷🩷🤍🤍"
-      },
-      {
-        src: "4.jpg",
-        info: "慵懶喵 💤 適合躺平，放鬆充電的一天～\n情緒值：🩷🩷🩷🩷🤍"
-      },
-      {
-        src: "5.jpg",
-        info: "開朗喵 ☀️ 你的笑容會治癒所有人！\n情緒值：🩷🩷🩷🩷🩷"
-      },
-      {
-        src: "6.jpg",
-        info: "哲學喵 🧠 今天適合靜靜思考和整理心情\n情緒值：🩷🩷🤍🤍🤍"
-      },
-      {
-        src: "7.jpg",
-        info: "療癒喵 💗 你的存在本身就是幸運～\n情緒值：🩷🩷🩷🩷🤍"
-      },
+      { src: "1.jpg", info: "喵吉祥物 ☆ 你是今天的閃亮之星！", emotion: ["1.png", "1.png", "1.png", "2.png", "2.png"] },
+      { src: "2.jpg", info: "活力喵 今天一起動起來吧～", emotion: ["1.png", "1.png", "1.png", "1.png", "1.png"] },
+      { src: "3.jpg", info: "焦慮喵 （*/◕_◕\）今天也要加油喔！", emotion: ["1.png", "2.png", "2.png", "2.png", "2.png"] },
+      { src: "4.jpg", info: "療癒喵 ❤️ 你是幸運本人～", emotion: ["1.png", "1.png", "1.png", "1.png", "2.png"] },
+      { src: "5.jpg", info: "探險喵 ✈️ 你就是勇士！", emotion: ["1.png", "1.png", "2.png", "2.png", "2.png"] },
+      { src: "6.jpg", info: "慵懶喵 一起休息耍廢吧~", emotion: ["1.png", "1.png", "1.png", "1.png", "2.png"] },
+      { src: "7.jpg", info: "開朗喵 ☼ 你的笑容最漂亮！", emotion: ["1.png", "1.png", "1.png", "1.png", "1.png"] },
     ];
 
-    // 開場動畫後顯示主畫面
+    let drawCount = 0;
+    const maxDrawsPerDay = 2;
+
+    function playBGM() {
+      bgm.currentTime = 0;
+      bgm.play();
+    }
+
+    function stopBGM() {
+      bgm.pause();
+      bgm.currentTime = 0;
+    }
+
+    function createStars() {
+      for (let i = 0; i < 30; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * -100 + 'px';
+        starContainer.appendChild(star);
+      }
+    }
+
+    drawBtn.addEventListener('click', () => {
+      if (drawCount >= maxDrawsPerDay) {
+        alert('一天只能抽 2 次喔！');
+        return;
+      }
+      if (bgm.paused) playBGM();
+
+      const random = Math.floor(Math.random() * cards.length);
+      const card = cards[random];
+      catCard.src = card.src;
+      catCard.style.display = 'block';
+      cardInfo.innerHTML = `${card.info}<br><div class="emoji-container">${card.emotion.map(img => `<img src="${img}" />`).join('')}</div>`;
+
+      drawCount++;
+    });
+
+    resetBtn.addEventListener('click', () => {
+      drawCount = 0;
+      catCard.style.display = 'none';
+      cardInfo.innerHTML = '';
+      stopBGM();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopBGM();
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         app.classList.remove('hidden');
-        bgm.play();
+        createStars();
       }, 3000);
     });
 
-    // 切換 app 時自動關閉音樂
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        bgm.pause();
-      } else {
-        bgm.play();
-      }
-    });
-
-    drawBtn.addEventListener("click", () => {
-      const random = Math.floor(Math.random() * cards.length);
-      catCard.src = cards[random].src;
-      cardInfo.textContent = cards[random].info;
-    });
-  </script>
-</body>
+    bgm.addEventListener("ended", stopBGM);
+  </script></body>
 </html>
